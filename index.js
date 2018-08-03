@@ -68,11 +68,67 @@ controller.storage.teams.all(function (err, teams) {
   }
 })
 
+controller.on('dialog_submission', function (bot, message) {
+  console.log('dialog_submission', message)
+
+  var payload = JSON.parse(message.callback_id)
+  payload.body = message.submission.textarea
+  payload.approver = message.user
+
+  var attach = makeAttachment(payload,
+    util.format('Announcement approved with changes by <@%s>', message.user), '#333333')
+
+  attach.callback_id = 'announcement_authorization'
+  attach.actions = [
+    {
+      name: 'Approve',
+      text: 'Approve',
+      type: 'button',
+      value: JSON.stringify(Object.assign(payload, {vote: 'approve'}))
+    },
+    {
+      name: 'Deny',
+      text: 'Deny',
+      type: 'button',
+      value: JSON.stringify(Object.assign(payload, {vote: 'deny', approver: payload.user}))
+    }
+  ]
+
+  bot.send({
+    icon_url: ICON_URL,
+    channel: payload.user,
+    attachments: [ attach ]
+  }, function (err) {
+    var msg = 'Announcement edit submitted to author for approval.'
+    var color = '#333333'
+    if (err !== null) {
+      console.log('Error sending edit request:', err)
+      msg = 'Error: failed sending edit request, please try again.'
+      color = '#FF6464'
+    }
+
+    bot.replyInteractive(Object.assign(message, {response_url: payload.response_url}), {
+      icon_url: ICON_URL,
+      attachments: [ makeAttachment(payload, msg, color) ]
+    }, function (err) {
+      if (err !== undefined) {
+        console.log('Error notifying moderators of edit request:', err)
+        bot.dialogError(err)
+        return
+      }
+
+      bot.dialogOk()
+    })
+  })
+})
+
 controller.on('interactive_message_callback', function (bot, message) {
   console.log('interactive_message_callback', message)
 
   var payload = JSON.parse(message.text)
-  var userId = message.raw_message.user.id
+  var userId = payload.approver || message.raw_message.user.id
+
+  message.response_url = payload.response_url || message.response_url
 
   if (payload.vote === 'deny') {
     bot.replyInteractive(message, {
@@ -100,6 +156,25 @@ controller.on('interactive_message_callback', function (bot, message) {
           console.log('Error notifying user of deny:', err)
         }
       })
+    })
+
+    return
+  } else if (payload.vote === 'edit') {
+    console.log(payload)
+    var body = payload.body
+    payload.body = undefined
+    payload.response_url = message.response_url
+
+    bot.replyWithDialog(message, bot.createDialog(
+      'Editing request',
+      JSON.stringify(payload),
+      'Submit'
+    ).addTextarea(
+      'Editing request',
+      'textarea', body).asObject(), function (err) {
+      if (err !== null) {
+        console.log('Error sending edit dialog to user:', err)
+      }
     })
 
     return
@@ -170,6 +245,12 @@ controller.on('slash_command', function (bot, message) {
         text: 'Approve',
         type: 'button',
         value: JSON.stringify(Object.assign(payload, {vote: 'approve'}))
+      },
+      {
+        name: 'Approve with changes',
+        text: 'Approve with changes',
+        type: 'button',
+        value: JSON.stringify(Object.assign(payload, {vote: 'edit'}))
       },
       {
         name: 'Deny',
