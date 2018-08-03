@@ -27,3 +27,5 @@ You must set:
 * `SLACK_ANNOUNCEMENT_CHANNEL`: channel to send announcement requests to.
 * `SLACK_MODERATION_CHANNEL`: channel to send moderation requests to.
 * `ANNOUNCEBOT_DATABASE`: path to where announcebot should store oauth info.
+
+Once started, navigate to `https://yourbot/login` to set it up in your workspace.
