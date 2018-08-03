@@ -5,7 +5,7 @@ A Slack bot for allowing users to create announcements that are moderated by Sla
 
 Example request:
 
-![](https://i.imgur.com/Z7u0lhw.png)
+![](https://i.imgur.com/IOuUauF.png)
 
 To install:
 
