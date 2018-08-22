@@ -27,7 +27,7 @@ var controller = Botkit.slackbot({
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
   redirectUri: process.env.SLACK_APP_URL + '/oauth',
-  scopes: ['bot', 'commands']
+  scopes: ['bot', 'commands', 'chat:write:bot', 'chat:write:user']
 })
 
 controller.setupWebserver(8889, function (err, webserver) {
