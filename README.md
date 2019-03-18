@@ -27,6 +27,7 @@ You must set as Environment Variables:
 * `SLACK_APP_URL`: the base URL that your application is reachable at
 * `SLACK_ANNOUNCEMENT_CHANNEL`: channel to send announcement requests to.
 * `SLACK_MODERATION_CHANNEL`: channel to send moderation requests to.
-* `ANNOUNCEBOT_DATABASE`: path to where announcebot should store oauth info. (In the format <yourdirectory>/
-
+* `ANNOUNCEBOT_DATABASE`: path to where announcebot should store oauth info. (In the format <yourdirectory>)
+* `ANNOUNCEBOT_PORT`: the port you want to run announce bot on, if left blank it'll run on 8889
+  
 Once started, navigate to `https://yourbot/login` to set it up in your workspace.
