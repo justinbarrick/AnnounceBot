@@ -23,9 +23,10 @@ You must set:
 
 * `SLACK_CLIENT_ID`: your slack client id
 * `SLACK_CLIENT_SECRET`: your slack client secret
+* `SLACK_SIGNING_SECRET`: Your slack signing secret
 * `SLACK_APP_URL`: the base URL that your application is reachable at
 * `SLACK_ANNOUNCEMENT_CHANNEL`: channel to send announcement requests to.
 * `SLACK_MODERATION_CHANNEL`: channel to send moderation requests to.
-* `ANNOUNCEBOT_DATABASE`: path to where announcebot should store oauth info.
+* `ANNOUNCEBOT_DATABASE`: path to where announcebot should store oauth info. (In the format <yourdirectory>/
 
 Once started, navigate to `https://yourbot/login` to set it up in your workspace.
