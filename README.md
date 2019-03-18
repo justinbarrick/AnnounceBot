@@ -19,7 +19,7 @@ To run:
 npm start
 ```
 
-You must set:
+You must set as Environment Variables:
 
 * `SLACK_CLIENT_ID`: your slack client id
 * `SLACK_CLIENT_SECRET`: your slack client secret
