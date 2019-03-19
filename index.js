@@ -22,7 +22,8 @@ function makeAttachment (payload, heading, color) {
 }
 
 var controller = Botkit.slackbot({
-  json_file_store: process.env.YIMBYBOT_DATABASE
+  json_file_store: process.env.ANNOUNCEBOT_DATABASE,
+  clientSigningSecret: process.env.SLACK_SIGNING_SECRET
 }).configureSlackApp({
   clientId: process.env.SLACK_CLIENT_ID,
   clientSecret: process.env.SLACK_CLIENT_SECRET,
